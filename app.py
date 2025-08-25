@@ -2,8 +2,17 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Page settings
-st.set_page_config(page_title="Smart Energy Meter - Darshan JR", page_icon="⚡")
+# Page settings for SEO
+st.set_page_config(
+    page_title="Darshan JR | Smart Energy Meter",
+    page_icon="⚡",
+    layout="wide"
+)
+
+# Google Search Console verification meta tag (replace YOUR_CODE_HERE)
+st.markdown("""
+<meta name="google-site-verification" content="YOUR_CODE_HERE" />
+""", unsafe_allow_html=True)
 
 # Title & subtitle
 st.title("⚡ Smart Energy Meter")
