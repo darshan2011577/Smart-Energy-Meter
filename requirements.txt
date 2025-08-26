@@ -1,15 +1,6 @@
-<<<<<<< HEAD
 streamlit
 pandas
 numpy
 matplotlib
 scikit-learn
 tensorflow
-=======
-streamlit
-pandas
-numpy
-matplotlib
-scikit-learn
-tensorflow
->>>>>>> a0e1c77 (First commit - Smart Energy Meter project)
