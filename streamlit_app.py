@@ -1,5 +1,4 @@
 import streamlit as st
-<<<<<<< HEAD
 import app  # This will run your existing app.py file
 
 # SEO / Google visibility settings
@@ -45,4 +44,3 @@ My dream is to bring innovation in energy monitoring systems.
 ### 🔍 Find me on Google
 Search for **Darshan JR Smart Energy Meter** to see my work online.  
 """)
->>>>>>> 6c2775d (Added streamlit_app.py with SEO details)
