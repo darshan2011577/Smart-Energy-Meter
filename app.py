@@ -62,3 +62,58 @@ st.markdown(
     "</h4>",
     unsafe_allow_html=True
 )
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfgen import canvas
+import io
+
+# Function to generate project report PDF
+def create_project_report():
+    buffer = io.BytesIO()
+    p = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Title
+    p.setFont("Helvetica-Bold", 20)
+    p.drawCentredString(width/2, height - 100, "Smart Energy Meter Project Report")
+
+    # Content
+    p.setFont("Helvetica", 12)
+    text = p.beginText(50, height - 150)
+    text.textLine("This report presents the Smart Energy Meter Project developed using Python & Streamlit.")
+    text.textLine("")
+    text.textLine("The project demonstrates real-time monitoring of energy consumption,")
+    text.textLine("provides visualization dashboards, and applies AI techniques for analysis.")
+    text.textLine("")
+    text.textLine("The system aims to promote efficient energy management for households and industries.")
+    text.textLine("")
+    text.textLine("-------------------------------------------------------------")
+    text.textLine("Special Acknowledgement")
+    text.textLine("-------------------------------------------------------------")
+    text.textLine("")
+    text.textLine("We extend our heartfelt gratitude to our constant motivator,")
+    text.textLine("Dr. Vijayraj (Asst. Professor, AI&DS Dept),")
+    text.textLine("for his unwavering guidance, encouragement, and valuable insights,")
+    text.textLine("which inspired us throughout the development of this project.")
+    text.textLine("")
+    text.textLine("His mentorship has been a beacon of knowledge and motivation,")
+    text.textLine("helping us transform our ideas into reality.")
+    text.textLine("")
+    text.textLine("We proudly dedicate this project report as a token of respect and")
+    text.textLine("gratitude for his invaluable support.")
+    p.drawText(text)
+
+    p.showPage()
+    p.save()
+    buffer.seek(0)
+    return buffer
+
+# Add Download button in Streamlit
+st.subheader("📄 Project Report")
+pdf_buffer = create_project_report()
+st.download_button(
+    label="⬇️ Download Project Report",
+    data=pdf_buffer,
+    file_name="Smart_Energy_Meter_Report.pdf",
+    mime="application/pdf"
+)
+
