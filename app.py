@@ -2,151 +2,63 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from PIL import Image
-from io import BytesIO
+from sklearn.linear_model import LinearRegression
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
 
-# ---------------------------
-# Function to generate PDF
-# ---------------------------
-def create_pdf():
-    buffer = BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
+# Title
+st.title("⚡ Smart Energy Meter Dashboard")
 
-    # Title
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(100, height - 50, "🔋 Smart Energy Meter")
+# Sidebar
+st.sidebar.header("Navigation")
+option = st.sidebar.radio("Go to", ["Home", "Upload Data", "Analysis", "Prediction"])
 
-    # Developer Info
-    c.setFont("Helvetica", 12)
-    c.drawString(100, height - 100, "Developed by: Darshan JR")
+# Home
+if option == "Home":
+    st.subheader("Welcome to Smart Energy Meter Dashboard")
+    st.image("darshan_photo.jpeg", caption="Darshan JR", width=200)
+    st.write("""
+    This is a working model of a **Smart Energy Meter System**  
+    developed using **Python, Streamlit, and Machine Learning**.
+    """)
 
-    # Add photo
-    try:
-        img = Image.open("darshan_photo.jpeg")
-        img = img.resize((120, 120))  # Resize photo
-        c.drawImage(ImageReader(img), width - 200, height - 180, 120, 120)
-    except:
-        c.setFont("Helvetica", 10)
-        c.drawString(100, height - 120, "⚠️ Photo not found. Please place 'darshan_photo.jpeg' in the same folder.")
+# Upload Data
+elif option == "Upload Data":
+    st.subheader("Upload your CSV data")
+    uploaded_file = st.file_uploader("Choose a file", type=["csv"])
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.dataframe(df)
 
-    # Project Details
-    text = c.beginText(100, height - 220)
-    text.setFont("Helvetica", 11)
-    lines = [
-        "📘 Project Description",
-        "The Smart Energy Meter is a modern solution for monitoring and managing electricity consumption.",
-        "It enables real-time tracking of power usage, provides analytical insights, and promotes conservation.",
-        "",
-        "🛠️ Tools & Technologies Used:",
-        "- Programming Language: Python",
-        "- Framework: Streamlit",
-        "- Libraries: Pandas, NumPy, Matplotlib, PIL",
-        "- Version Control: Git & GitHub",
-        "",
-        "✨ Key Features:",
-        "- Real-time electricity usage monitoring",
-        "- Graphical visualization of power consumption",
-        "- Cost estimation and billing prediction",
-        "- User-friendly web interface",
-        "",
-        "✅ Conclusion:",
-        "This project integrates software and energy management, helping users track and optimize their energy usage."
-    ]
-    for line in lines:
-        text.textLine(line)
-    c.drawText(text)
+# Analysis
+elif option == "Analysis":
+    st.subheader("Data Analysis")
+    uploaded_file = st.file_uploader("Upload CSV for Analysis", type=["csv"])
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        st.write("### Dataset Preview")
+        st.dataframe(df.head())
+        st.write("### Summary Statistics")
+        st.write(df.describe())
+        st.write("### Consumption Trend")
+        df.plot()
+        st.pyplot(plt)
 
-    c.showPage()
-    c.save()
-    buffer.seek(0)
-    return buffer
+# Prediction
+elif option == "Prediction":
+    st.subheader("Energy Consumption Prediction")
+    X = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
+    y = np.array([2, 4, 6, 8, 10])
+    model = LinearRegression()
+    model.fit(X, y)
+    prediction = model.predict([[6]])
+    st.write(f"Predicted consumption for day 6: {prediction[0]} units")
 
-# ---------------------------
-# Sidebar Profile Section
-# ---------------------------
-st.sidebar.image("darshan_photo.jpeg", caption="Darshan JR", use_container_width=True)
-st.sidebar.title("🔋 Smart Energy Meter")
-st.sidebar.markdown("Developed by **Darshan JR**")
-st.sidebar.markdown("---")
-
-# ---------------------------
-# Main Title
-# ---------------------------
-st.title("🔋 Smart Energy Meter")
-st.markdown("### Developed by Darshan JR")
-
-# ---------------------------
-# Project Description
-# ---------------------------
-st.subheader("📘 Project Description")
-st.write("""
-The Smart Energy Meter is a modern solution for monitoring and managing household and 
-industrial electricity consumption. It enables real-time tracking of power usage, 
-provides analytical insights, and promotes energy conservation.
-""")
-
-# ---------------------------
-# Tools Used
-# ---------------------------
-st.subheader("🛠️ Tools & Technologies Used")
-st.write("""
-- **Programming Language**: Python  
-- **Framework**: Streamlit  
-- **Libraries**: Pandas, NumPy, Matplotlib, PIL  
-- **Version Control**: Git & GitHub  
-""")
-
-# ---------------------------
-# Key Features
-# ---------------------------
-st.subheader("✨ Key Features")
-st.write("""
-- Real-time electricity usage monitoring  
-- Graphical visualization of power consumption  
-- Cost estimation and billing prediction  
-- User-friendly web interface  
-""")
-
-# ---------------------------
-# Demo: Simulated Power Consumption Data
-# ---------------------------
-st.subheader("📊 Power Consumption Demo")
-
-# Generate sample data
-days = np.arange(1, 8)
-usage = np.random.randint(2, 10, size=7)  # Random kWh usage
-
-df = pd.DataFrame({"Day": days, "Usage (kWh)": usage})
-
-st.dataframe(df)
-
-# Plot
-fig, ax = plt.subplots()
-ax.plot(df["Day"], df["Usage (kWh)"], marker="o", linestyle="-")
-ax.set_title("Weekly Power Consumption")
-ax.set_xlabel("Day")
-ax.set_ylabel("Usage (kWh)")
-st.pyplot(fig)
-
-# ---------------------------
-# Conclusion
-# ---------------------------
-st.subheader("✅ Conclusion")
-st.write("""
-This project demonstrates the integration of software and energy management, providing users with 
-a smart and interactive system to track and optimize their energy usage.
-""")
-
-# ---------------------------
-# Download PDF Button
-# ---------------------------
-st.download_button(
-    label="📥 Download Project Report (PDF)",
-    data=create_pdf(),
-    file_name="Smart_Energy_Meter_Report.pdf",
-    mime="application/pdf"
+# --- Motivator Footer ---
+st.markdown("---")
+st.markdown(
+    "<h4 style='text-align: center; color: green;'>"
+    "🌟 My Constant Motivator: <b>Dr. Vijayraj</b><br>(Asst. Prof, AI&DS Dept)"
+    "</h4>",
+    unsafe_allow_html=True
 )
