@@ -2,5 +2,5 @@ streamlit
 pandas
 numpy
 matplotlib
-scikit-learn
-tensorflow
+Pillow
+reportlab
